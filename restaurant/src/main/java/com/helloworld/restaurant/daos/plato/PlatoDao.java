@@ -9,4 +9,8 @@ public interface PlatoDao {
 	List<Plato> getPlatos();
 	Optional<Plato> getPlatosById(int id);
 	List<Plato> getPlatosByCalories(int calories);
+
+	void deletePlato(int id);
+ 	void createPlato(Plato plato);
+	void updatePlato(Plato plato);
 }
