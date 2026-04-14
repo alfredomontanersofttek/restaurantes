@@ -32,4 +32,14 @@ public class PlatoServiceImpl implements PlatoService {
 	{
 		return platoDao.getPlatos().stream().filter(p -> p.calorias() < kcal).map(Plato::fromPlatoDAO).toList();
 	}
+
+	@Override
+	public Boolean addPlato(Plato plato) {
+		return platoDao.addPlato(plato.toPlatoDAO());
+	}
+
+	@Override
+	public Boolean deletePlato(int id) {
+		return null;
+	}
 }
