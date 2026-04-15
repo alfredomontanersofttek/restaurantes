@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS plato (
     precio NUMERIC(6,2) NOT NULL,
     categoria INT NOT NULL,
     calorias INT NOT NULL,
+    vegano BOOLEAN NOT NULL,
     CHECK (categoria IN (1, 2, 3))
 );
 CREATE TABLE IF NOT EXISTS restaurante (
