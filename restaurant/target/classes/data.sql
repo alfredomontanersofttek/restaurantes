@@ -1,13 +1,15 @@
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Ensalada', 6.00, 1, 150);
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Gazpacho', 7.00, 1, 110);
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Fabada', 9.00, 1, 470);
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Hamburguesa', 15.00, 2, 650);
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Solomillo', 28.00, 2, 360);
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Entrecot', 23.00, 2, 510);
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Merluza a la plancha', 21.00, 2, 180);
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Fruta', 6.00, 3, 80);
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Flan', 8.00, 3, 190);
-INSERT INTO plato(nombre, precio, categoria, calorias) VALUES('Arroz con leche', 8.00, 3, 240);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Ensalada', 6.00, 1, 150,true);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Gazpacho', 7.00, 1, 110,true);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Fabada', 9.00, 1, 470,false);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Hamburguesa', 15.00, 2, 650,false);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Solomillo', 28.00, 2, 360,false);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Entrecot', 23.00, 2, 510,false);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Merluza a la plancha', 21.00, 2, 180, false);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Fruta', 6.00, 3, 80,true);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Flan', 8.00, 3, 190,false);
+INSERT INTO plato(nombre, precio, categoria, calorias,vegano) VALUES('Arroz con leche', 8.00, 3, 240,false);
+INSERT INTO plato(nombre, precio, categoria, calorias, vegano) VALUES('Tofu', 3.00, 1, 100, true);
+INSERT INTO plato(nombre, precio, categoria, calorias, vegano) VALUES('Hamburguesa vegana', 12.00, 2, 400, true);
 
 INSERT INTO restaurante(cif, nombre, direccion, telefono) VALUES('A12345678', 'La Mar Salada', 'Calle Mayor, 1', '123456789');
 INSERT INTO restaurante(cif, nombre, direccion, telefono) VALUES('B12345678', 'El Asador', 'Calle Bailen, 2', '123456780');
