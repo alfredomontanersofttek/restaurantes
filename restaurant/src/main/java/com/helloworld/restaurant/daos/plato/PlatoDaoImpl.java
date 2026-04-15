@@ -59,10 +59,6 @@ public class PlatoDaoImpl implements PlatoDao {
         return jdbcTemplate.query(query, params, platoRowMapper);
     }
 
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 	@Override
 	public List<Plato> getPlatosByCalories(int calories)
 	{
@@ -79,8 +75,7 @@ public class PlatoDaoImpl implements PlatoDao {
 		String query = "DELETE FROM plato WHERE id = :id";
 		jdbcTemplate.update(query, params);
 	}
->>>>>>> fa8847f (Metodo delete , create y update de plato)
-=======
+
         params.put("id", plato.id());
         params.put("nombre", plato.nombre());
         params.put("precio", plato.precio());
@@ -106,7 +101,5 @@ public class PlatoDaoImpl implements PlatoDao {
 
         return rows > 0;
     }
->>>>>>> 5b7a5d9 (Revert "espacios corregidos")
-
 
 }
