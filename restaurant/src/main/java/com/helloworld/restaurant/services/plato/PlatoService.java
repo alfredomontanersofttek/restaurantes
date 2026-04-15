@@ -11,4 +11,5 @@ public interface PlatoService {
 	List<Plato> getPlatosByCalories(int kcal);
 	Boolean addPlato(Plato plato);
 	Boolean deletePlato(int id);
+	Boolean updatePlato(Plato plato);
 }

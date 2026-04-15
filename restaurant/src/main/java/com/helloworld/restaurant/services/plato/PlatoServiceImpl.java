@@ -40,6 +40,11 @@ public class PlatoServiceImpl implements PlatoService {
 
 	@Override
 	public Boolean deletePlato(int id) {
-		return null;
+		return platoDao.deletePlato(id);
+	}
+
+	@Override
+	public Boolean updatePlato(Plato plato) {
+		return platoDao.updatePlato(plato.toPlatoDAO());
 	}
 }

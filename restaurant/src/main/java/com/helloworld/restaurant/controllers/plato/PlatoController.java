@@ -16,4 +16,6 @@ public interface PlatoController {
     Boolean addPlato(Plato plato);
 
     Boolean deletePlato(int id);
+
+    Boolean updatePlato(Plato plato);
 }

@@ -64,5 +64,11 @@ public class PlatoControllerImpl implements PlatoController {
         return true;
     }
 
+    @PostMapping("/")
+    @Override
+    public Boolean updatePlato(@RequestBody Plato plato) {
+        return platoService.updatePlato(plato);
+    }
+
 
 }
