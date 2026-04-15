@@ -25,7 +25,7 @@ public class MenuServiceImpl implements MenuService
     @Override
     public List<Menu> getMenusByRestaurante(String cif)
     {
-        List<Plato> platos = restauranteService.getRestauranteByCif(cif).getPlatos();
+        List<Plato> platos = restauranteService.getPlatosByRestaurante(cif);
         List<Plato> entrantes = platos.stream().filter(plato -> plato.getCategoria().equals(Plato.Categoria.PRIMER_PLATO)).toList();
         List<Plato> principales = platos.stream().filter(plato -> plato.getCategoria().equals(Plato.Categoria.SEGUNDO_PLATO)).toList();
         List<Plato> postres = platos.stream().filter(plato -> plato.getCategoria().equals(Plato.Categoria.POSTRE)).toList();
