@@ -7,6 +7,12 @@ import java.util.List;
 
 public interface RestauranteController {
     List<Restaurante> getRestaurantes();
+
     Restaurante getRestauranteByCif(String cif);
+
     List<Plato> getPlatosByRestaurante(String cif);
+
+    Boolean addPlato(Plato plato, int restauranteId);
+
+    Boolean deletePlato(int id, int restauranteId);
 }

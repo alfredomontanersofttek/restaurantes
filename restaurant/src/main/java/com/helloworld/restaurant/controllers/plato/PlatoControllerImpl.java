@@ -45,24 +45,4 @@ public class PlatoControllerImpl implements PlatoController {
         List<Plato> platosByCalories = platoService.getPlatosByCalories(calories);
         return platosByCalories;
     }
-
-    @PutMapping("/")
-    @Override
-    public Boolean addPlato(@RequestBody Plato plato) {
-        return platoService.addPlato(plato);
-    }
-
-    @DeleteMapping("/{id}")
-    @Override
-    public Boolean deletePlato(@PathVariable int id) {
-        boolean deleted = platoService.deletePlato(id);
-
-        if (!deleted) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado");
-        }
-
-        return true;
-    }
-
-
 }

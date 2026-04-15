@@ -11,8 +11,4 @@ public interface PlatoDao {
     Optional<Plato> getPlatosById(int id);
 
     List<Plato> getPlatosByCalories(int calories);
-
-    Boolean addPlato(Plato plato);
-
-    Boolean deletePlato(int id);
 }

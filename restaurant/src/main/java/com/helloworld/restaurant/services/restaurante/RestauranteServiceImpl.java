@@ -36,4 +36,14 @@ public class RestauranteServiceImpl implements RestauranteService {
                 .map(Plato::fromPlatoDAO)
                 .toList();
     }
+
+    @Override
+    public Boolean addPlato(Plato plato, int restauranteId) {
+        return restauranteDao.addPlato(plato, restauranteId);
+    }
+
+    @Override
+    public Boolean deletePlato(int idPlato, int restauranteId) {
+        return restauranteDao.deletePlato(idPlato, restauranteId);
+    }
 }

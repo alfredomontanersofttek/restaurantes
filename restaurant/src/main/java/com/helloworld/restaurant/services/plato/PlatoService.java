@@ -9,6 +9,4 @@ public interface PlatoService {
 	List<Plato> getPlatos();
 	Optional<Plato> getPlatosById(int id);
 	List<Plato> getPlatosByCalories(int kcal);
-	Boolean addPlato(Plato plato);
-	Boolean deletePlato(int id);
 }

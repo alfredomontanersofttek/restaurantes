@@ -4,10 +4,7 @@ import com.helloworld.restaurant.model.Plato;
 import com.helloworld.restaurant.model.Restaurante;
 import com.helloworld.restaurant.services.restaurante.RestauranteService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -41,5 +38,21 @@ public class RestauranteControllerImpl implements RestauranteController {
         restauranteService.getRestauranteByCif(cif)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurante no encontrado"));
         return restauranteService.getPlatosByRestaurante(cif);
+    }
+
+    @PutMapping("/{restauranteId}/platos")
+    @Override
+    public Boolean addPlato(@RequestBody Plato plato, @PathVariable int restauranteId) {
+        return restauranteService.addPlato(plato, restauranteId);
+    }
+
+    @DeleteMapping("/{restauranteId}/platos/{platoId}")
+    @Override
+    public Boolean deletePlato(@PathVariable int platoId, @PathVariable int restauranteId) {
+        boolean deleted = restauranteService.deletePlato(platoId, restauranteId);
+
+        if (!deleted)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado");
+        return true;
     }
 }

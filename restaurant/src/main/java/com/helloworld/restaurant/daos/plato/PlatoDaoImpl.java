@@ -59,35 +59,7 @@ public class PlatoDaoImpl implements PlatoDao {
         return jdbcTemplate.query(query, params, platoRowMapper);
     }
 
-    @Override
-    public Boolean addPlato(Plato plato) {
-        Map<String, Object> params = new HashMap<>();
 
-        params.put("id", plato.id());
-        params.put("nombre", plato.nombre());
-        params.put("precio", plato.precio());
-        params.put("categoria", plato.categoria());
-        params.put("calorias", plato.calorias());
-
-        String query = "INSERT INTO plato (id, nombre, precio, categoria, calorias) " +
-                "VALUES (:id, :nombre, :precio, :categoria, :calorias)";
-
-        int rows = jdbcTemplate.update(query, params);
-
-        return rows > 0;
-    }
-
-    @Override
-    public Boolean deletePlato(int id) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", id);
-
-        String query = "DELETE FROM plato WHERE id = :id";
-
-        int rows = jdbcTemplate.update(query, params);
-
-        return rows > 0;
-    }
 
 
 }

@@ -68,4 +68,41 @@ public class RestauranteDaoImpl implements RestauranteDao {
                 """;
         return jdbcTemplate.query(query, params, platoRowMapper);
     }
+
+    @Override
+    public Boolean addPlato(com.helloworld.restaurant.model.Plato plato, int restauranteId) {
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("id", plato.getId());
+        params.put("nombre", plato.getNombre());
+        params.put("precio", plato.getPrecio());
+        params.put("categoria", plato.getCategoria());
+        params.put("calorias", plato.getCalorias());
+        params.put("restauranteId", restauranteId);
+
+        String query = "INSERT INTO plato (id, nombre, precio, categoria, calorias, restaurante_id) " +
+                "VALUES (:id, :nombre, :precio, :categoria, :calorias, :restauranteId)";
+
+        int rows = jdbcTemplate.update(query, params);
+
+        return rows > 0;
+    }
+
+
+    @Override
+    public Boolean deletePlato(int platoId, int restauranteId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("platoId", platoId);
+        params.put("restauranteId", restauranteId);
+
+        String sql = """
+                    DELETE FROM restaurante_plato
+                    WHERE plato_id = :platoId
+                    AND restaurante_id = :restauranteId
+                """;
+
+        int rows = jdbcTemplate.update(sql, params);
+
+        return rows > 0;
+    }
 }

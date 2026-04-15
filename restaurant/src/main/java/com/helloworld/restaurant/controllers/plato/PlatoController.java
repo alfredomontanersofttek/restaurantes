@@ -13,7 +13,5 @@ public interface PlatoController {
 
     List<Plato> getPlatosByCalories(int calories);
 
-    Boolean addPlato(Plato plato);
 
-    Boolean deletePlato(int id);
 }

@@ -8,6 +8,12 @@ import java.util.Optional;
 
 public interface RestauranteService {
     List<Restaurante> getRestaurantes();
+
     Optional<Restaurante> getRestauranteByCif(String cif);
+
     List<Plato> getPlatosByRestaurante(String cif);
+
+    Boolean addPlato(Plato plato, int restauranteId);
+
+    Boolean deletePlato(int idPlato, int restauranteId);
 }
