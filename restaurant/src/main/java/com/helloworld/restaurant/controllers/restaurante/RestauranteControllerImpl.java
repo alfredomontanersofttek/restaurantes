@@ -43,7 +43,11 @@ public class RestauranteControllerImpl implements RestauranteController {
     @PutMapping("/{restauranteId}/platos")
     @Override
     public Boolean addPlato(@RequestBody Plato plato, @PathVariable int restauranteId) {
-        return restauranteService.addPlato(plato, restauranteId);
+        boolean add = restauranteService.addPlato(plato, restauranteId);
+
+        if (!add)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se pudo añadir el plato.");
+        return true;
     }
 
     @DeleteMapping("/{restauranteId}/platos/{platoId}")
@@ -52,7 +56,7 @@ public class RestauranteControllerImpl implements RestauranteController {
         boolean deleted = restauranteService.deletePlato(platoId, restauranteId);
 
         if (!deleted)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado.");
         return true;
     }
 }
