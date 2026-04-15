@@ -24,8 +24,9 @@ public class PlatoDaoImpl implements PlatoDao {
         double precio = rs.getDouble("precio");
         int categoria = rs.getInt("categoria");
         int calorias = rs.getInt("calorias");
+        boolean vegano=rs.getBoolean("vegano");
 
-        return new Plato(id, nombre, precio, categoria, calorias);
+        return new Plato(id, nombre, precio, categoria, calorias,vegano);
     };
 
     public PlatoDaoImpl(NamedParameterJdbcTemplate jdbcTemplate) {
@@ -34,7 +35,7 @@ public class PlatoDaoImpl implements PlatoDao {
 
     @Override
     public List<Plato> getPlatos() {
-        String query = "SELECT id, nombre, precio, categoria, calorias FROM plato";
+        String query = "SELECT id, nombre, precio, categoria, vegano calorias FROM plato";
         return jdbcTemplate.query(query, platoRowMapper);
     }
 
@@ -43,7 +44,7 @@ public class PlatoDaoImpl implements PlatoDao {
 
         Map<String, Object> params = new HashMap<>();
         params.put("id", platoId);
-        String query = "SELECT id, nombre, precio, categoria, calorias FROM plato WHERE id = :id";
+        String query = "SELECT id, nombre, precio, categoria, calorias, vegano FROM plato WHERE id = :id";
         try {
             return Optional.of(jdbcTemplate.queryForObject(query, params, platoRowMapper));
         } catch (EmptyResultDataAccessException e) {
@@ -55,7 +56,7 @@ public class PlatoDaoImpl implements PlatoDao {
     public List<Plato> getPlatosByCalories(int calories) {
         Map<String, Object> params = new HashMap<>();
         params.put("calorias", calories);
-        String query = "SELECT id, nombre, precio, categoria, calorias FROM plato WHERE calorias < :calories";
+        String query = "SELECT id, nombre, precio, categoria, calorias, vegano FROM plato WHERE calorias < :calories";
         return jdbcTemplate.query(query, params, platoRowMapper);
     }
 
