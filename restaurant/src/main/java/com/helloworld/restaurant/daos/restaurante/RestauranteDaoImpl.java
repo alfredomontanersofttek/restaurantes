@@ -4,13 +4,14 @@ import com.helloworld.restaurant.daos.model.Plato;
 import com.helloworld.restaurant.daos.model.Restaurante;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class RestauranteDaoImpl implements RestauranteDao {
@@ -46,9 +47,10 @@ public class RestauranteDaoImpl implements RestauranteDao {
 
     @Override
     public Optional<Restaurante> getRestauranteByCif(String cif) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("cif", cif);
+        Map<String, Object> params = Map.of("cif", cif);
+
         String query = "SELECT cif, nombre, direccion, telefono FROM restaurante WHERE cif = :cif";
+
         try {
             return Optional.of(jdbcTemplate.queryForObject(query, params, restauranteRowMapper));
         } catch (EmptyResultDataAccessException e) {
@@ -58,47 +60,66 @@ public class RestauranteDaoImpl implements RestauranteDao {
 
     @Override
     public List<Plato> getPlatosByRestaurante(String cif) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("cif", cif);
+        Map<String, Object> params = Map.of("cif", cif);
+
         String query = """
                 SELECT p.id, p.nombre, p.precio, p.categoria, p.calorias
                 FROM plato p
                 JOIN restaurante_plato rp ON p.id = rp.id_plato
                 WHERE rp.cif_restaurante = :cif
                 """;
+
         return jdbcTemplate.query(query, params, platoRowMapper);
     }
 
     @Override
-    public Boolean addPlato(com.helloworld.restaurant.model.Plato plato, int restauranteId) {
-        Map<String, Object> params = new HashMap<>();
+    @Transactional
+    public Boolean addPlato(com.helloworld.restaurant.model.Plato plato, String cifRestaurante) {
 
-        params.put("id", plato.getId());
-        params.put("nombre", plato.getNombre());
-        params.put("precio", plato.getPrecio());
-        params.put("categoria", plato.getCategoria());
-        params.put("calorias", plato.getCalorias());
-        params.put("restauranteId", restauranteId);
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("nombre", plato.getNombre())
+                .addValue("precio", plato.getPrecio())
+                .addValue("categoria", plato.getCategoria())
+                .addValue("calorias", plato.getCalorias());
 
-        String query = "INSERT INTO plato (id, nombre, precio, categoria, calorias, restaurante_id) " +
-                "VALUES (:id, :nombre, :precio, :categoria, :calorias, :restauranteId)";
+        String insertPlato = """
+                INSERT INTO plato (nombre, precio, categoria, calorias)
+                VALUES (:nombre, :precio, :categoria, :calorias)
+                """;
 
-        int rows = jdbcTemplate.update(query, params);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(insertPlato, params, keyHolder);
+
+        Integer platoId = Objects.requireNonNull(keyHolder.getKey()).intValue();
+    
+        String insertRelacion = """
+                INSERT INTO restaurante_plato (id_plato, cif_restaurante)
+                VALUES (:platoId, :cifRestaurante)
+                """;
+
+        Map<String, Object> relParams = Map.of(
+                "platoId", platoId,
+                "cifRestaurante", cifRestaurante
+        );
+
+        int rows = jdbcTemplate.update(insertRelacion, relParams);
 
         return rows > 0;
     }
 
-
     @Override
-    public Boolean deletePlato(int platoId, int restauranteId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("platoId", platoId);
-        params.put("restauranteId", restauranteId);
+    public Boolean deletePlato(int platoId, String restauranteCif) {
+
+        Map<String, Object> params = Map.of(
+                "platoId", platoId,
+                "restauranteCif", restauranteCif
+        );
 
         String sql = """
-                    DELETE FROM restaurante_plato
-                    WHERE plato_id = :platoId
-                    AND restaurante_id = :restauranteId
+                DELETE FROM restaurante_plato
+                WHERE id_plato = :platoId
+                AND cif_restaurante = :restauranteCif
                 """;
 
         int rows = jdbcTemplate.update(sql, params);

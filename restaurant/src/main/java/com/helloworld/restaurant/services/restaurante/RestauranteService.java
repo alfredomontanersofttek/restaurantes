@@ -13,7 +13,7 @@ public interface RestauranteService {
 
     List<Plato> getPlatosByRestaurante(String cif);
 
-    Boolean addPlato(Plato plato, int restauranteId);
+    Boolean addPlato(Plato plato, String restauranteId);
 
-    Boolean deletePlato(int idPlato, int restauranteId);
+    Boolean deletePlato(int idPlato, String restauranteId);
 }

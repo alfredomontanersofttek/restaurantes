@@ -38,12 +38,12 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public Boolean addPlato(Plato plato, int restauranteId) {
+    public Boolean addPlato(Plato plato, String restauranteId) {
         return restauranteDao.addPlato(plato, restauranteId);
     }
 
     @Override
-    public Boolean deletePlato(int idPlato, int restauranteId) {
+    public Boolean deletePlato(int idPlato, String restauranteId) {
         return restauranteDao.deletePlato(idPlato, restauranteId);
     }
 }

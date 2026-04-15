@@ -40,10 +40,10 @@ public class RestauranteControllerImpl implements RestauranteController {
         return restauranteService.getPlatosByRestaurante(cif);
     }
 
-    @PutMapping("/{restauranteId}/platos")
+    @PutMapping("/{retaurantecif}/platos")
     @Override
-    public Boolean addPlato(@RequestBody Plato plato, @PathVariable int restauranteId) {
-        boolean add = restauranteService.addPlato(plato, restauranteId);
+    public Boolean addPlato(@RequestBody Plato plato, @PathVariable String retauranteCif) {
+        boolean add = restauranteService.addPlato(plato, retauranteCif);
 
         if (!add)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se pudo añadir el plato.");
@@ -52,8 +52,8 @@ public class RestauranteControllerImpl implements RestauranteController {
 
     @DeleteMapping("/{restauranteId}/platos/{platoId}")
     @Override
-    public Boolean deletePlato(@PathVariable int platoId, @PathVariable int restauranteId) {
-        boolean deleted = restauranteService.deletePlato(platoId, restauranteId);
+    public Boolean deletePlato(@PathVariable int platoId, @PathVariable String restauranteCif) {
+        boolean deleted = restauranteService.deletePlato(platoId, restauranteCif);
 
         if (!deleted)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado.");
