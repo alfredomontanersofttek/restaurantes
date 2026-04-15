@@ -32,7 +32,8 @@ public class RestauranteDaoImpl implements RestauranteDao {
                     rs.getString("nombre"),
                     rs.getDouble("precio"),
                     rs.getInt("categoria"),
-                    rs.getInt("calorias")
+                    rs.getInt("calorias"),
+                    rs.getBoolean("vegano")
             );
 
     public RestauranteDaoImpl(NamedParameterJdbcTemplate jdbcTemplate) {
@@ -63,7 +64,7 @@ public class RestauranteDaoImpl implements RestauranteDao {
         Map<String, Object> params = Map.of("cif", cif);
 
         String query = """
-                SELECT p.id, p.nombre, p.precio, p.categoria, p.calorias
+                SELECT p.id, p.nombre, p.precio, p.categoria, p.calorias, p.vegano
                 FROM plato p
                 JOIN restaurante_plato rp ON p.id = rp.id_plato
                 WHERE rp.cif_restaurante = :cif

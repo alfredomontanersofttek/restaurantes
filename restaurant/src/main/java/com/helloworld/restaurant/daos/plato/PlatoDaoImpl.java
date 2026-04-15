@@ -35,7 +35,7 @@ public class PlatoDaoImpl implements PlatoDao {
 
     @Override
     public List<Plato> getPlatos() {
-        String query = "SELECT id, nombre, precio, categoria, vegano calorias FROM plato";
+        String query = "SELECT id, nombre, precio, categoria,calorias, vegano FROM plato";
         return jdbcTemplate.query(query, platoRowMapper);
     }
 
