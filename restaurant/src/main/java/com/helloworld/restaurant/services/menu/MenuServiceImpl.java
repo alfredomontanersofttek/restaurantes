@@ -1,8 +1,10 @@
 package com.helloworld.restaurant.services.menu;
 
 import com.helloworld.restaurant.model.Menu;
+import com.helloworld.restaurant.model.MenuFilter;
 import com.helloworld.restaurant.model.Plato;
 import com.helloworld.restaurant.services.plato.PlatoService;
+import com.helloworld.restaurant.services.restaurante.RestauranteService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,19 +13,19 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
-public class MenuServiceImpl implements MenuService {
+public class MenuServiceImpl implements MenuService
+{
 
-    private final PlatoService platoService;
-    private final Random random = new Random();
+    private final RestauranteService restauranteService;
 
-    public MenuServiceImpl(PlatoService platoService) {
-        this.platoService = platoService;
+    public MenuServiceImpl(RestauranteService restauranteService) {
+        this.restauranteService = restauranteService;
     }
 
     @Override
-    public List<Menu> generarMenus()
+    public List<Menu> getMenusByRestaurante(String cif)
     {
-        List<Plato> platos = platoService.getPlatos();
+        List<Plato> platos = restauranteService.getRestauranteByCif(cif).getPlatos();
         List<Plato> entrantes = platos.stream().filter(plato -> plato.getCategoria().equals(Plato.Categoria.PRIMER_PLATO)).toList();
         List<Plato> principales = platos.stream().filter(plato -> plato.getCategoria().equals(Plato.Categoria.SEGUNDO_PLATO)).toList();
         List<Plato> postres = platos.stream().filter(plato -> plato.getCategoria().equals(Plato.Categoria.POSTRE)).toList();
@@ -43,7 +45,7 @@ public class MenuServiceImpl implements MenuService {
         return menus;
     }
 
-    @Override
+    /*@Override
     public Menu getMenuRandom() {
         List<Menu> menus = generarMenus();
 
@@ -53,20 +55,24 @@ public class MenuServiceImpl implements MenuService {
 
         int index = random.nextInt(menus.size());
         return menus.get(index);
-    }
+    }*/
 
     @Override
-    public List<Menu> getMenusLowCost() {
+    public List<Menu> getMenusByFilter(String cif, MenuFilter filter)
+    {
+        List<Menu> menus = getMenusByRestaurante(cif);
 
-        List<Menu> menus = generarMenus();
-
-        double media = menus.stream()
-                .mapToDouble(Menu::getPrecioTotal)
-                .average()
-                .orElse(0);
-
-        return menus.stream()
-                .filter(menu -> menu.getPrecioTotal() < media)
-                .collect(Collectors.toList());
+        switch (filter)
+        {
+            case LOWCOST:
+                double media = menus.stream().mapToDouble(Menu::getPrecioTotal).average().orElse(0);
+                return menus.stream().filter(m -> m.getPrecioTotal() <= media).toList();
+            case HEALTHY:
+                double mediaCalorias = menus.stream().mapToDouble(Menu::getCaloriasTotales).average().orElse(0);
+                return menus.stream().filter(m -> m.getCaloriasTotales() < mediaCalorias).toList();
+            case ALL:
+            default:
+                return menus;
+        }
     }
 }
