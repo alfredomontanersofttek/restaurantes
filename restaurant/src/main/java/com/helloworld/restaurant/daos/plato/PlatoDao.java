@@ -6,6 +6,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PlatoDao {
+<<<<<<< HEAD
+	List<Plato> getPlatos();
+	Optional<Plato> getPlatosById(int id);
+	List<Plato> getPlatosByCalories(int calories);
+
+	void deletePlato(int id);
+ 	void createPlato(Plato plato);
+	void updatePlato(Plato plato);
+=======
     List<Plato> getPlatos();
 
     Optional<Plato> getPlatosById(int id);
@@ -15,6 +24,5 @@ public interface PlatoDao {
     Boolean addPlato(Plato plato);
 
     Boolean deletePlato(int id);
-
-    Boolean updatePlato(Plato plato);
+>>>>>>> 71f669d (Revert "espacios corregidos")
 }
