@@ -15,4 +15,6 @@ public interface PlatoDao {
     Boolean addPlato(Plato plato);
 
     Boolean deletePlato(int id);
+
+    Boolean updatePlato(Plato plato);
 }
