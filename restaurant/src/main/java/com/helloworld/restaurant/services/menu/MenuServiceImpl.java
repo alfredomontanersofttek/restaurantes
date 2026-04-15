@@ -70,6 +70,9 @@ public class MenuServiceImpl implements MenuService
             case HEALTHY:
                 double mediaCalorias = menus.stream().mapToDouble(Menu::getCaloriasTotales).average().orElse(0);
                 return menus.stream().filter(m -> m.getCaloriasTotales() < mediaCalorias).toList();
+            case VEGAN:
+                return menus.stream().filter(m->m.getPrimerPlato().isVegano() &&
+                        m.getSegundoPlato().isVegano() && m.getPostre().isVegano()).toList();
             case ALL:
             default:
                 return menus;

@@ -5,5 +5,6 @@ public enum MenuFilter
     ALL,
     LOWCOST,
     HEALTHY,
-    GOURMET
+    GOURMET,
+    VEGAN
 }
