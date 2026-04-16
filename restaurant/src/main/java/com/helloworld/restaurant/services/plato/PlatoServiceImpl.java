@@ -30,7 +30,7 @@ public class PlatoServiceImpl implements PlatoService {
 	@Override
 	public List<Plato> getPlatosByCalories(int kcal)
 	{
-		return platoDao.getPlatos().stream().filter(p -> p.calorias() < kcal).map(Plato::fromPlatoDAO).toList();
+		return platoDao.getPlatosByCalories(kcal).stream().map(Plato::fromPlatoDAO).toList();
 	}
 
 	@Override

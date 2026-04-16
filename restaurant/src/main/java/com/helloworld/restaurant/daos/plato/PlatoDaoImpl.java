@@ -55,7 +55,7 @@ public class PlatoDaoImpl implements PlatoDao {
     @Override
     public List<Plato> getPlatosByCalories(int calories) {
         Map<String, Object> params = new HashMap<>();
-        params.put("calorias", calories);
+        params.put("calories", calories);
         String query = "SELECT id, nombre, precio, categoria, calorias, vegano FROM plato WHERE calorias < :calories";
         return jdbcTemplate.query(query, params, platoRowMapper);
     }
@@ -69,9 +69,10 @@ public class PlatoDaoImpl implements PlatoDao {
         params.put("precio", plato.precio());
         params.put("categoria", plato.categoria());
         params.put("calorias", plato.calorias());
+        params.put("vegano", plato.vegano());
 
-        String query = "INSERT INTO plato (id, nombre, precio, categoria, calorias) " +
-                "VALUES (:id, :nombre, :precio, :categoria, :calorias)";
+        String query = "INSERT INTO plato (id, nombre, precio, categoria, calorias, vegano) " +
+                "VALUES (:id, :nombre, :precio, :categoria, :calorias, :vegano)";
 
         int rows = jdbcTemplate.update(query, params);
 
@@ -98,8 +99,9 @@ public class PlatoDaoImpl implements PlatoDao {
         params.put("precio", plato.precio());
         params.put("categoria", plato.categoria());
         params.put("calorias", plato.calorias());
+        params.put("vegano", plato.vegano());
 
-        String query = "UPDATE plato SET nombre = :nombre, precio = :precio, categoria = :categoria, calorias = :calorias WHERE id = :id";
+        String query = "UPDATE plato SET nombre = :nombre, precio = :precio, categoria = :categoria, calorias = :calorias, vegano = :vegano WHERE id = :id";
 
         int rows = jdbcTemplate.update(query, params);
 
