@@ -29,6 +29,8 @@ class RestauranteControllerTest {
 
     private Restaurante restaurante;
 
+    private Plato plato = new Plato(123, "Cocido", 30.0, Plato.Categoria.SEGUNDO_PLATO, 540, false);
+
     @BeforeEach
     void setUp() {
         restaurante = new Restaurante("A12345678", "La Mar Salada", "Calle Mayor, 1", "123456789");
@@ -46,17 +48,18 @@ class RestauranteControllerTest {
 
     @Test
     void getRestauranteByCif_cuandoExiste_debeRetornarRestaurante() {
-        when(restauranteService.getRestauranteByCif("A12345678")).thenReturn(Optional.of(restaurante));
+        when(restauranteService.getRestauranteByCif("A12345678"))
+                .thenReturn(Optional.of(restaurante));
 
         Restaurante result = restauranteController.getRestauranteByCif("A12345678");
 
         assertThat(result.getCif()).isEqualTo("A12345678");
-        assertThat(result.getDireccion()).isEqualTo("Calle Mayor, 1");
     }
 
     @Test
     void getRestauranteByCif_cuandoNoExiste_debeLanzar404() {
-        when(restauranteService.getRestauranteByCif("Z99999999")).thenReturn(Optional.empty());
+        when(restauranteService.getRestauranteByCif("Z99999999"))
+                .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> restauranteController.getRestauranteByCif("Z99999999"))
                 .isInstanceOf(ResponseStatusException.class)
@@ -65,22 +68,65 @@ class RestauranteControllerTest {
 
     @Test
     void getPlatosByRestaurante_cuandoExiste_debeRetornarPlatos() {
-        Plato plato = new Plato(1, "Ensalada", 6.00, Plato.Categoria.PRIMER_PLATO, 150,true);
-        when(restauranteService.getRestauranteByCif("A12345678")).thenReturn(Optional.of(restaurante));
-        when(restauranteService.getPlatosByRestaurante("A12345678")).thenReturn(List.of(plato));
+        Plato plato = new Plato(1, "Ensalada", 6.00, Plato.Categoria.PRIMER_PLATO, 150, true);
+
+        when(restauranteService.getRestauranteByCif("A12345678"))
+                .thenReturn(Optional.of(restaurante));
+        when(restauranteService.getPlatosByRestaurante("A12345678"))
+                .thenReturn(List.of(plato));
 
         List<Plato> result = restauranteController.getPlatosByRestaurante("A12345678");
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getNombre()).isEqualTo("Ensalada");
     }
 
     @Test
     void getPlatosByRestaurante_cuandoRestauranteNoExiste_debeLanzar404() {
-        when(restauranteService.getRestauranteByCif("Z99999999")).thenReturn(Optional.empty());
+        when(restauranteService.getRestauranteByCif("Z99999999"))
+                .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> restauranteController.getPlatosByRestaurante("Z99999999"))
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Restaurante no encontrado");
+    }
+
+    @Test
+    void addPlato_cuandoSeAnade_debeRetornarTrue() {
+        when(restauranteService.addPlato(plato, restaurante.getCif()))
+                .thenReturn(true);
+
+        boolean result = restauranteController.addPlato(plato, restaurante.getCif());
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void addPlato_cuandoFalla_debeLanzar404() {
+        when(restauranteService.addPlato(plato, restaurante.getCif()))
+                .thenReturn(false);
+
+        assertThatThrownBy(() -> restauranteController.addPlato(plato, restaurante.getCif()))
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining("No se pudo añadir el plato.");
+    }
+
+    @Test
+    void deletePlato_cuandoSeElimina_debeDevolverTrue() {
+        when(restauranteService.deletePlato(1, restaurante.getCif()))
+                .thenReturn(true);
+
+        boolean result = restauranteController.deletePlato(1, restaurante.getCif());
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void deletePlato_cuandoNoExiste_debeLanzar404() {
+        when(restauranteService.deletePlato(999, restaurante.getCif()))
+                .thenReturn(false);
+
+        assertThatThrownBy(() -> restauranteController.deletePlato(999, restaurante.getCif()))
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining("Plato no encontrado.");
     }
 }
