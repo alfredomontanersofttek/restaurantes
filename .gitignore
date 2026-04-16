@@ -1,2 +1,4 @@
-restaurant/.idea/.gitignore
-restaurant/
+target/
+.idea/
+*.log
+*.iml
