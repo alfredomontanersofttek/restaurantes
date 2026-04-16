@@ -1,9 +1,8 @@
-package com.helloworld.restaurant.services;
+package com.helloworld.restaurant.services.restaurante;
 
 import com.helloworld.restaurant.daos.model.Restaurante;
 import com.helloworld.restaurant.daos.restaurante.RestauranteDao;
 import com.helloworld.restaurant.model.Plato;
-import com.helloworld.restaurant.services.restaurante.RestauranteServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
