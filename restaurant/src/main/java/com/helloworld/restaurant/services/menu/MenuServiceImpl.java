@@ -62,8 +62,8 @@ public class MenuServiceImpl implements MenuService
     {
         List<Menu> menus = getMenusByRestaurante(cif);
 
-        switch (filter)
-        {
+        //Cambio del switch por clases de cada tipo
+        switch (filter) {
             case LOWCOST:
                 double media = menus.stream().mapToDouble(Menu::getPrecioTotal).average().orElse(0);
                 return menus.stream().filter(m -> m.getPrecioTotal() <= media).toList();
