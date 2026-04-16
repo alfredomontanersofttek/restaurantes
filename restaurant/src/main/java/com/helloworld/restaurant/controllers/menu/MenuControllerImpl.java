@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restaurantes/{cif}/menus")
+@RequestMapping("/restaurante/locales/{cif}/menus")
 public class MenuControllerImpl {
 
     private final MenuService menuService;
@@ -18,7 +18,7 @@ public class MenuControllerImpl {
     }
 
     @GetMapping
-    public List<Menu> getMenus(@PathVariable String cif, MenuFilter filter)
+    public List<Menu> getMenus(@PathVariable String cif,@RequestParam(defaultValue = "ALL") MenuFilter filter)
     {
         return menuService.getMenusByFilter(cif, filter);
     }
