@@ -18,19 +18,22 @@ public class PlatoServiceImpl implements PlatoService {
 
 	@Override
 	public List<Plato> getPlatos() {
-		return platoDao.getPlatos().stream().map(Plato::fromPlatoDAO).toList();
+		return platoDao.getPlatos().stream()
+				.map(Plato::fromPlatoDAO)
+				.toList();
 	}
-
 
 	@Override
 	public Optional<Plato> getPlatosById(int id) {
-		return platoDao.getPlatosById(id).map(Plato::fromPlatoDAO);
+		return platoDao.getPlatosById(id)
+				.map(Plato::fromPlatoDAO);
 	}
 
 	@Override
-	public List<Plato> getPlatosByCalories(int kcal)
-	{
-		return platoDao.getPlatosByCalories(kcal).stream().map(Plato::fromPlatoDAO).toList();
+	public List<Plato> getPlatosByCalories(int kcal) {
+		return platoDao.getPlatosByCalories(kcal).stream()
+				.map(Plato::fromPlatoDAO)
+				.toList();
 	}
 
 	@Override

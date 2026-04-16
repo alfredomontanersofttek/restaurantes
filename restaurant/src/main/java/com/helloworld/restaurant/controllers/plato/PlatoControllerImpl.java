@@ -1,12 +1,14 @@
 package com.helloworld.restaurant.controllers.plato;
 
-import com.helloworld.restaurant.daos.plato.PlatoDao;
 import com.helloworld.restaurant.model.Plato;
 import com.helloworld.restaurant.services.plato.PlatoService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,55 +22,52 @@ public class PlatoControllerImpl implements PlatoController {
         this.platoService = platoService;
     }
 
-
     @Override
     @GetMapping("")
     public List<Plato> getPlatos() {
-        List<Plato> platos = platoService.getPlatos();
-        return platos;
+        return platoService.getPlatos();
     }
 
     @Override
     @GetMapping("/{id}")
     public Plato getPlatosById(@PathVariable String id) {
         Optional<Plato> plato = platoService.getPlatosById(Integer.parseInt(id));
-        if (plato.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado");
-        } else {
-            return plato.get();
-        }
+        return plato.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado"));
     }
 
     @Override
-    @GetMapping("/{kcal}")
+    @GetMapping("/kcal/{calories}")
     public List<Plato> getPlatosByCalories(@PathVariable int calories) {
-        List<Plato> platosByCalories = platoService.getPlatosByCalories(calories);
-        return platosByCalories;
+        return platoService.getPlatosByCalories(calories);
     }
 
-    @PutMapping("/")
+    @PostMapping("/")
     @Override
-    public Boolean addPlato(@RequestBody Plato plato) {
-        return platoService.addPlato(plato);
+    public ResponseEntity<Void> addPlato(@RequestBody Plato plato) {
+        boolean created = platoService.addPlato(plato);
+        if (created) {
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("{id}")
+                    .buildAndExpand(plato.getId())
+                    .toUri();
+            return ResponseEntity.created(location).build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @DeleteMapping("/{id}")
     @Override
     public Boolean deletePlato(@PathVariable int id) {
-        boolean deleted = platoService.deletePlato(id);
-
-        if (!deleted) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado");
+        if (!platoService.deletePlato(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-
         return true;
     }
 
-    @PostMapping("/")
+    @PutMapping("/")
     @Override
     public Boolean updatePlato(@RequestBody Plato plato) {
         return platoService.updatePlato(plato);
     }
-
-
 }
