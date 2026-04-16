@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import com.helloworld.restaurant.model.Plato.Categoria;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,16 +15,19 @@ import java.util.Optional;
 @Repository
 public class PlatoDaoImpl implements PlatoDao {
 
-    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
-    private final RowMapper<Plato> platoRowMapper = (rs, rowNum) -> new Plato(
-            rs.getInt("id"),
-            rs.getString("nombre"),
-            rs.getDouble("precio"),
-            rs.getInt("categoria"),
-            rs.getInt("calorias"),
-            rs.getBoolean("vegano") // El 6º campo para que no de error de "length"
-    );
+    private RowMapper<Plato> platoRowMapper = (rs, rowNum) ->
+    {
+        int id = rs.getInt("id");
+        String nombre = rs.getString("nombre");
+        double precio = rs.getDouble("precio");
+        int categoria = rs.getInt("categoria");
+        int calorias = rs.getInt("calorias");
+        boolean vegano=rs.getBoolean("vegano");
+
+        return new Plato(id, nombre, precio, categoria, calorias,vegano);
+    };
 
     public PlatoDaoImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -31,15 +35,18 @@ public class PlatoDaoImpl implements PlatoDao {
 
     @Override
     public List<Plato> getPlatos() {
-        return jdbcTemplate.query("SELECT id, nombre, precio, categoria, calorias, vegano FROM plato", platoRowMapper);
+        String query = "SELECT id, nombre, precio, categoria,calorias, vegano FROM plato";
+        return jdbcTemplate.query(query, platoRowMapper);
     }
 
     @Override
     public Optional<Plato> getPlatosById(int platoId) {
+
         Map<String, Object> params = new HashMap<>();
         params.put("id", platoId);
+        String query = "SELECT id, nombre, precio, categoria, calorias, vegano FROM plato WHERE id = :id";
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject("SELECT id, nombre, precio, categoria, calorias, vegano FROM plato WHERE id = :id", params, platoRowMapper));
+            return Optional.of(jdbcTemplate.queryForObject(query, params, platoRowMapper));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -49,12 +56,14 @@ public class PlatoDaoImpl implements PlatoDao {
     public List<Plato> getPlatosByCalories(int calories) {
         Map<String, Object> params = new HashMap<>();
         params.put("calories", calories);
-        return jdbcTemplate.query("SELECT id, nombre, precio, categoria, calorias, vegano FROM plato WHERE calorias < :calories", params, platoRowMapper);
+        String query = "SELECT id, nombre, precio, categoria, calorias, vegano FROM plato WHERE calorias < :calories";
+        return jdbcTemplate.query(query, params, platoRowMapper);
     }
 
     @Override
     public Boolean addPlato(Plato plato) {
         Map<String, Object> params = new HashMap<>();
+
         params.put("id", plato.id());
         params.put("nombre", plato.nombre());
         params.put("precio", plato.precio());
@@ -62,15 +71,24 @@ public class PlatoDaoImpl implements PlatoDao {
         params.put("calorias", plato.calorias());
         params.put("vegano", plato.vegano());
 
-        String query = "INSERT INTO plato (id, nombre, precio, categoria, calorias, vegano) VALUES (:id, :nombre, :precio, :categoria, :calorias, :vegano)";
-        return jdbcTemplate.update(query, params) > 0;
+        String query = "INSERT INTO plato (id, nombre, precio, categoria, calorias, vegano) " +
+                "VALUES (:id, :nombre, :precio, :categoria, :calorias, :vegano)";
+
+        int rows = jdbcTemplate.update(query, params);
+
+        return rows > 0;
     }
 
     @Override
     public Boolean deletePlato(int id) {
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
-        return jdbcTemplate.update("DELETE FROM plato WHERE id = :id", params) > 0;
+
+        String query = "DELETE FROM plato WHERE id = :id";
+
+        int rows = jdbcTemplate.update(query, params);
+
+        return rows > 0;
     }
 
     @Override
@@ -84,6 +102,9 @@ public class PlatoDaoImpl implements PlatoDao {
         params.put("vegano", plato.vegano());
 
         String query = "UPDATE plato SET nombre = :nombre, precio = :precio, categoria = :categoria, calorias = :calorias, vegano = :vegano WHERE id = :id";
-        return jdbcTemplate.update(query, params) > 0;
+
+        int rows = jdbcTemplate.update(query, params);
+
+        return rows > 0;
     }
 }
