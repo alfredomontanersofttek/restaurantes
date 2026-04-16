@@ -11,7 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("restaurante/locales")
-public class RestauranteControllerImpl implements RestauranteController {
+public class
+RestauranteControllerImpl implements RestauranteController {
 
     private final RestauranteService restauranteService;
 
