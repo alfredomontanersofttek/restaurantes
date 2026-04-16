@@ -1,0 +1,28 @@
+# IntelliJ / JetBrains
+.idea/
+*.iml
+
+# Maven / Java
+target/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build / output
+dist/
+build/
+out/
+
+# Environment variables
+.env
+
+# Node (opcional, si aplica)
+node_modules/
+
+# Python (opcional, si aplica)
+__pycache__/
+*.pyc
