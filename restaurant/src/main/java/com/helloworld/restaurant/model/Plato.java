@@ -40,13 +40,15 @@ public class Plato {
 	private final double precio;
 	private final Categoria categoria;
 	private int calorias;
+	private final boolean vegano;
 
-	public Plato(Integer id, String nombre, double precio, Categoria categoria, int calorias) {
+	public Plato(Integer id, String nombre, double precio, Categoria categoria, int calorias, boolean vegano) {
 		this.id = id;
 		this.nombre = nombre;
 		this.precio = precio;
 		this.categoria = categoria;
 		this.calorias = calorias;
+		this.vegano = vegano;
 	}
 
 
@@ -65,7 +67,8 @@ public class Plato {
 				plato.nombre(),
 				plato.precio(),
 				categoria,
-				plato.calorias()
+				plato.calorias(),
+				plato.vegano()
 		);
 	}
 
@@ -82,7 +85,8 @@ public class Plato {
 				this.getNombre(),
 				this.getPrecio(),
 				cat,
-				this.getCalorias()
+				this.getCalorias(),
+				this.isVegano()
 		);
 	}
 }
