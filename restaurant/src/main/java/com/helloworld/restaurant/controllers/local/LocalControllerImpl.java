@@ -2,10 +2,12 @@ package com.helloworld.restaurant.controllers.local;
 
 import com.helloworld.restaurant.model.Local;
 import com.helloworld.restaurant.services.local.LocalService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("restaurante/locales")
@@ -20,13 +22,8 @@ public class LocalControllerImpl implements LocalController {
 
     @Override
     @PostMapping("")
-    public ResponseEntity<Void> createLocal(@RequestBody Local local) {
-
+    public void createLocal(@RequestBody Local local) {
         localService.createLocal(local);
-
-        return ResponseEntity
-                .created(URI.create("/restaurante/locales/" + local.getCif()))
-                .build();
     }
 
     @Override

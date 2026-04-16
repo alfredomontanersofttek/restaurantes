@@ -1,12 +1,13 @@
 package com.helloworld.restaurant.controllers.local;
 
 import com.helloworld.restaurant.model.Local;
-import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface LocalController {
 
 
-    ResponseEntity<Void> createLocal(Local local);
+    void createLocal(Local local);
 
     void updateLocal(String cif, Local local);
 
