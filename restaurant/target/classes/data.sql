@@ -36,3 +36,9 @@ INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(10, 'C12345678')
 INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(7, 'C12345678');
 INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(7, 'B12345678');
 INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(7, 'A12345678');
+INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(11, 'C12345678');
+INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(11, 'B12345678');
+INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(11, 'A12345678');
+INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(12, 'C12345678');
+INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(12, 'B12345678');
+INSERT INTO restaurante_plato(id_plato, cif_restaurante) VALUES(12, 'A12345678');

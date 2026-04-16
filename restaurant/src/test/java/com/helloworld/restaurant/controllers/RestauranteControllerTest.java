@@ -66,7 +66,7 @@ class RestauranteControllerTest {
 
     @Test
     void getPlatosByRestaurante_cuandoExiste_debeRetornarPlatos() {
-        Plato plato = new Plato(1, "Ensalada", 6.00, Plato.Categoria.PRIMER_PLATO, 150);
+        Plato plato = new Plato(1, "Ensalada", 6.00, Plato.Categoria.PRIMER_PLATO, 150,true);
         when(restauranteService.getRestauranteByCif("A12345678")).thenReturn(Optional.of(restaurante));
         when(restauranteService.getPlatosByRestaurante("A12345678")).thenReturn(List.of(plato));
 

@@ -66,7 +66,7 @@ class RestauranteServiceTest {
     @Test
     void getPlatosByRestaurante_debeRetornarPlatosDelLocal() {
         com.helloworld.restaurant.daos.model.Plato platoDAO =
-                new com.helloworld.restaurant.daos.model.Plato(1, "Ensalada", 6.00, 1, 150);
+                new com.helloworld.restaurant.daos.model.Plato(1, "Ensalada", 6.00, 1, 150,true);
 
         when(restauranteDao.getPlatosByRestaurante("A12345678")).thenReturn(List.of(platoDAO));
 
