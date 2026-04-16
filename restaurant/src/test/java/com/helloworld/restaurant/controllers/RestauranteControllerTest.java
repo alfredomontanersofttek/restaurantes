@@ -1,5 +1,6 @@
-package com.helloworld.restaurant.controllers.restaurante;
+package com.helloworld.restaurant.controllers;
 
+import com.helloworld.restaurant.controllers.restaurante.RestauranteControllerImpl;
 import com.helloworld.restaurant.model.Plato;
 import com.helloworld.restaurant.model.Restaurante;
 import com.helloworld.restaurant.services.restaurante.RestauranteService;

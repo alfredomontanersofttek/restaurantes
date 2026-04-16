@@ -2,6 +2,8 @@ package com.helloworld.restaurant.model;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class Restaurante {
 
