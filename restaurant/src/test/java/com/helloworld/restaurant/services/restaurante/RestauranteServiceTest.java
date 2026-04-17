@@ -81,8 +81,6 @@ class RestauranteServiceTest {
         assertThat(result.get(0).getPrecio()).isEqualTo(6.00);
     }
 
-    // ✅ ADD PLATO
-
     @Test
     void addPlato_cuandoSeAnade_debeRetornarTrue() {
         Plato plato = new Plato(1, "Ensalada", 6.00, Plato.Categoria.PRIMER_PLATO, 150, true);
