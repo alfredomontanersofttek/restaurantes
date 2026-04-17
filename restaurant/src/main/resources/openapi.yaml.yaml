@@ -1,0 +1,375 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: Platos
+  description: Endpoints para la gestión del menú de platos
+paths:
+  /restaurante/platos/:
+    put:
+      tags:
+      - Platos
+      summary: Añadir nuevo plato
+      description: Registra un nuevo plato en la base de datos
+      operationId: addPlato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Plato"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+    post:
+      tags:
+      - Platos
+      summary: Actualizar plato
+      description: Modifica los datos de un plato existente
+      operationId: updatePlato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Plato"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /restaurante/locales/{retaurantecif}/platos:
+    put:
+      tags:
+      - restaurante-controller-impl
+      operationId: addPlato_1
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Plato"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /restaurante/locales/{cif}:
+    get:
+      tags:
+      - restaurante-controller-impl
+      operationId: getRestauranteByCif
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Restaurante"
+    put:
+      tags:
+      - local-controller-impl
+      operationId: updateLocal
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Local"
+        required: true
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+      - local-controller-impl
+      operationId: deleteLocal
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /restaurante/locales:
+    get:
+      tags:
+      - restaurante-controller-impl
+      operationId: getRestaurantes
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Restaurante"
+    post:
+      tags:
+      - local-controller-impl
+      operationId: createLocal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Local"
+        required: true
+      responses:
+        "200":
+          description: OK
+  /restaurante/platos:
+    get:
+      tags:
+      - Platos
+      summary: Obtener todos los platos
+      description: Devuelve la lista completa de platos registrados en el restaurante
+      operationId: getPlatos
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plato"
+  /restaurante/platos/{id}:
+    get:
+      tags:
+      - Platos
+      summary: Buscar plato por ID
+      description: Obtiene los detalles de un plato específico usando su identificador
+        numérico
+      operationId: getPlatosById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Plato"
+    delete:
+      tags:
+      - Platos
+      summary: Eliminar plato
+      description: Borra un plato del sistema mediante su ID
+      operationId: deletePlato
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /restaurante/platos/calorias/{calories}:
+    get:
+      tags:
+      - Platos
+      summary: Filtrar por calorías
+      description: Retorna una lista de platos que coinciden con el nivel de calorías
+        indicado
+      operationId: getPlatosByCalories
+      parameters:
+      - name: calories
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plato"
+  /restaurante/locales/{cif}/platos:
+    get:
+      tags:
+      - restaurante-controller-impl
+      operationId: getPlatosByRestaurante
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plato"
+  /restaurante/locales/{cif}/menus:
+    get:
+      tags:
+      - menu-controller-impl
+      operationId: getMenus
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ALL
+          enum:
+          - ALL
+          - LOWCOST
+          - HEALTHY
+          - GOURMET
+          - VEGAN
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Menu"
+  /restaurante/locales/{restauranteId}/platos/{platoId}:
+    delete:
+      tags:
+      - restaurante-controller-impl
+      operationId: deletePlato_1
+      parameters:
+      - name: platoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+components:
+  schemas:
+    Plato:
+      type: object
+      description: Modelo que representa un plato del menú del restaurante
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Identificador único del plato
+          example: 10
+        nombre:
+          type: string
+          description: Nombre completo del plato
+          example: Ceviche Tradicional
+        precio:
+          type: number
+          format: double
+          description: Precio de venta al publico en euros
+          example: 18.5
+        categoria:
+          type: string
+          description: "Tipo de plato (Entrante, Principal o Postre)"
+          enum:
+          - Entrante
+          - Plato principal
+          - Postre
+        calorias:
+          type: integer
+          format: int32
+          description: Cantidad de calorías aproximadas
+          example: 450
+        vegano:
+          type: boolean
+          description: Indica si el plato es apto para dietas veganas
+          example: false
+    Local:
+      type: object
+      properties:
+        cif:
+          type: string
+        nombre:
+          type: string
+        direccion:
+          type: string
+        telefono:
+          type: string
+        platos:
+          type: array
+          items:
+            $ref: "#/components/schemas/Plato"
+    Restaurante:
+      type: object
+      properties:
+        cif:
+          type: string
+        nombre:
+          type: string
+        direccion:
+          type: string
+        telefono:
+          type: string
+    Menu:
+      type: object
+      properties:
+        primerPlato:
+          $ref: "#/components/schemas/Plato"
+        segundoPlato:
+          $ref: "#/components/schemas/Plato"
+        postre:
+          $ref: "#/components/schemas/Plato"
+        caloriasTotales:
+          type: integer
+          format: int32
+        precioTotal:
+          type: number
+          format: double
