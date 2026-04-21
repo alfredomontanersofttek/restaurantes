@@ -14,10 +14,12 @@ CREATE TABLE IF NOT EXISTS restaurante (
     telefono VARCHAR(255) NOT NULL
 );
 
+DROP TABLE IF EXISTS restaurante_plato;
+
 CREATE TABLE IF NOT EXISTS restaurante_plato (
     id_plato INT,
     cif_restaurante VARCHAR(255),
     PRIMARY KEY (id_plato, cif_restaurante),
-    FOREIGN KEY (id_plato) REFERENCES plato(id),
-    FOREIGN KEY (cif_restaurante) REFERENCES restaurante(cif)
+    FOREIGN KEY (id_plato) REFERENCES plato(id) ON DELETE CASCADE,
+    FOREIGN KEY (cif_restaurante) REFERENCES restaurante(cif) ON DELETE CASCADE
 );
