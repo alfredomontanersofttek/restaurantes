@@ -1,19 +1,25 @@
 package com.helloworld.restaurant.controllers.plato;
 
-import com.helloworld.restaurant.daos.plato.PlatoDao;
 import com.helloworld.restaurant.model.Plato;
 import com.helloworld.restaurant.services.plato.PlatoService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("restaurante/platos")
-public class PlatoControllerImpl implements PlatoController {
+public class PlatoControllerImpl implements PlatoController
+{
 
+    private static final String COOKIE_NAME = "calorie_filter";
+    private static final int COOKIE_MAX_AGE = 60;
     private final PlatoService platoService;
 
     public PlatoControllerImpl(PlatoService platoService) {
@@ -21,11 +27,49 @@ public class PlatoControllerImpl implements PlatoController {
     }
 
 
-    @Override
     @GetMapping("")
-    public List<Plato> getPlatos() {
-        List<Plato> platos = platoService.getPlatos();
-        return platos;
+    public List<Plato> getPlatos(HttpServletRequest request, @RequestParam(required = false) Integer calories, HttpServletResponse response)
+    {
+        if (calories != null)
+        {
+            Cookie cookie = new Cookie(COOKIE_NAME, String.valueOf(calories));
+            cookie.setMaxAge(COOKIE_MAX_AGE);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+            return platoService.getPlatosByCalories(calories);
+        }
+
+        Optional<Integer> calorieFilter = getCalorieFilterFromCookie(request);
+        if (calorieFilter.isPresent()) {
+            return platoService.getPlatosByCalories(calorieFilter.get());
+        }
+
+        return platoService.getPlatos();
+    }
+
+    private Optional<Integer> getCalorieFilterFromCookie(HttpServletRequest request)
+    {
+        if (request.getCookies() == null)
+        {
+            return Optional.empty();
+        }
+        return Arrays.stream(request.getCookies())
+                .filter(c -> COOKIE_NAME.equals(c.getName()))
+                .map(Cookie::getValue)
+                .filter(v -> !v.isBlank())
+                .map(Integer::parseInt)
+                .findFirst();
+    }
+
+    @Override
+    @DeleteMapping("/calories/filter")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void clearCalorieFilter(HttpServletResponse response) {
+        Cookie cookie = new Cookie(COOKIE_NAME, "");
+        cookie.setMaxAge(0); // Expiración inmediata → el navegador/cliente la elimina
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 
     @Override
@@ -39,12 +83,6 @@ public class PlatoControllerImpl implements PlatoController {
         }
     }
 
-    @Override
-    @GetMapping("/{kcal}")
-    public List<Plato> getPlatosByCalories(@PathVariable int calories) {
-        List<Plato> platosByCalories = platoService.getPlatosByCalories(calories);
-        return platosByCalories;
-    }
 
     @PutMapping("/")
     @Override
