@@ -5,6 +5,7 @@ import com.helloworld.restaurant.model.MenuFilter;
 import com.helloworld.restaurant.model.Plato;
 import com.helloworld.restaurant.services.plato.PlatoService;
 import com.helloworld.restaurant.services.restaurante.RestauranteService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,25 +46,14 @@ public class MenuServiceImpl implements MenuService
         return menus;
     }
 
-    /*@Override
-    public Menu getMenuRandom() {
-        List<Menu> menus = generarMenus();
-
-        if (menus.isEmpty()) {
-            throw new RuntimeException("No hay menús disponibles");
-        }
-
-        int index = random.nextInt(menus.size());
-        return menus.get(index);
-    }*/
-
     @Override
+    @Cacheable(value="menus",key="#cif +'::'+ #filter")
     public List<Menu> getMenusByFilter(String cif, MenuFilter filter)
     {
         List<Menu> menus = getMenusByRestaurante(cif);
 
-        //Cambio del switch por clases de cada tipo
-        switch (filter) {
+        switch (filter)
+        {
             case LOWCOST:
                 double media = menus.stream().mapToDouble(Menu::getPrecioTotal).average().orElse(0);
                 return menus.stream().filter(m -> m.getPrecioTotal() <= media).toList();

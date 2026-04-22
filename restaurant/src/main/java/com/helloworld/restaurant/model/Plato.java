@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Plato {
+public class Plato implements Serializable
+{
 
 	public enum Categoria {
 		PRIMER_PLATO ("Entrante"),

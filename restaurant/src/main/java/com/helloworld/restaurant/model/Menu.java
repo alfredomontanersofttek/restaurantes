@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
+import java.io.Serializable;
+
 
 @Schema(example =
         "{" +
@@ -14,7 +16,7 @@ import lombok.Data;
         "\"postre\": {\"id\": 8, \"nombre\": \"Fruta\", \"precio\": 6.00, \"categoria\": \"3\", \"calorias\": 80, \"vegano\": true}" +
         "}")
 @Data
-public class Menu
+public class Menu implements Serializable
 {
     @Schema(description = "Plato de categoría PRIMER_PLATO")
     @NotNull

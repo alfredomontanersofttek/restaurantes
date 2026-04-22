@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("restaurante/platos")
@@ -37,24 +38,20 @@ public class PlatoControllerImpl implements PlatoController
             cookie.setPath("/");
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
-            return platoService.getPlatosByCalories(calories);
         }
 
-        Optional<Integer> calorieFilter = getCalorieFilterFromCookie(request);
-        if (calorieFilter.isPresent()) {
-            return platoService.getPlatosByCalories(calorieFilter.get());
-        }
+        int activeFilter = Optional.ofNullable(calories).or(() -> getCalorieFilterFromCookie(request)).orElse(Integer.MAX_VALUE);
 
-        return platoService.getPlatos();
+        return activeFilter == Integer.MAX_VALUE
+                ? platoService.getPlatos()
+                : platoService.getPlatosByCalories(activeFilter);
     }
 
-    private Optional<Integer> getCalorieFilterFromCookie(HttpServletRequest request)
+    public Optional<Integer> getCalorieFilterFromCookie(HttpServletRequest request)
     {
-        if (request.getCookies() == null)
-        {
-            return Optional.empty();
-        }
-        return Arrays.stream(request.getCookies())
+        return Optional.ofNullable(request.getCookies())
+                .map(Arrays::stream)
+                .orElseGet(Stream::empty)
                 .filter(c -> COOKIE_NAME.equals(c.getName()))
                 .map(Cookie::getValue)
                 .filter(v -> !v.isBlank())
@@ -65,9 +62,10 @@ public class PlatoControllerImpl implements PlatoController
     @Override
     @DeleteMapping("/calories/filter")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void clearCalorieFilter(HttpServletResponse response) {
+    public void clearCalorieFilter(HttpServletResponse response)
+    {
         Cookie cookie = new Cookie(COOKIE_NAME, "");
-        cookie.setMaxAge(0); // Expiración inmediata → el navegador/cliente la elimina
+        cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
     }
